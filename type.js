@@ -1,76 +1,21 @@
 /* ==========================================================================
-   1. WORD & SENTENCE POOLS (Dynamic 1000 Word Generators)
+   1. WORD & SENTENCE POOLS (Meaningful Sentences with Punctuation)
    ========================================================================== */
-
-const baseEnglishWords = [
-    "The", "quick", "brown", "fox", "jumps", "over", "lazy", "dog", "Practice", "makes", 
-    "perfect", "aspect", "life", "Honesty", "best", "policy", "build", "great", "network", "Technology", 
-    "changing", "world", "amazing", "software", "tools", "Keep", "your", "eyes", "stars", "feet", 
-    "ground", "science", "future", "system", "device", "creative", "engine", "developer", "digital", "smart",
-    "matrix", "cipher", "secret", "crypto", "quantum", "logical", "binary", "terminal", "keyboard", "rotor",
-    "algorithm", "security", "password", "server", "database", "cloud", "internet", "website", "application",
-    "compiler", "function", "variable", "constant", "syntax", "hacker", "firewall", "protocol", "packet", "signal",
-    "voltage", "circuit", "resistor", "current", "display", "monitor", "memory", "storage", "backup", "recovery",
-    "process", "thread", "kernel", "graphics", "interface", "hardware", "firmware", "sensor", "module", "library",
-    "success", "journey", "achieve", "believe", "inspire", "imagine", "create", "discover", "explore", "connect",
-    "together", "history", "culture", "nature", "weather", "climate", "energy", "planet", "galaxy", "universe",
-    "freedom", "justice", "peace", "wisdom", "knowledge", "honour", "courage", "patience", "silence", "shadow",
-    "morning", "sunset", "station", "railway", "airport", "highway", "traffic", "vehicle", "electric",
-    "machine", "factory", "product", "quality", "service", "support", "message", "console", "channel", "stream",
-    "frequent", "regular", "special", "central", "federal", "dynamic", "static", "virtual", "optical", "acoustic"
+const englishSentences = [
+    ["The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog."],
+    ["Practice", "makes", "a", "man", "perfect", "in", "every", "aspect", "of", "life."],
+    ["Honesty", "is", "the", "best", "policy", "to", "build", "a", "great", "network."],
+    ["Technology", "is", "changing", "the", "world", "with", "amazing", "software", "tools."],
+    ["Keep", "your", "eyes", "on", "the", "stars", "and", "your", "feet", "on", "the", "ground."]
 ];
 
-const baseBanglaWords = [
-    "আমাদের", "ছোট", "নদীতে", "বংশী", "নদীর", "মাছ", "ভেসে", "ওঠে", "চাঁদের", "আলোয়",
-    "বাংলাদেশ", "একটি", "নদী", "মাতৃক", "সুন্দর", "দেশ", "আমি", "তোমায়", "ভালোবাসি", "পরিশ্রম",
-    "সৌভাগ্যের", "প্রসূতি", "তাই", "সবাই", "একত্রে", "কাজ", "করুন", "দুঃখ", "কষ্ট", "মানুষের",
-    "জীবনকে", "স্মার্ট", "ও", "শক্তিশালী", "করে", "তোলে", "হাঁস", "এবং", "বিড়াল", "পাহাড়ের",
-    "কাছে", "কাঁচের", "থালায়", "খাবার", "খায়", "সোনার", "বাংলা", "সবুজ", "श्यामল", "চিরদিন",
-    "প্রযুক্তি", "সফটওয়্যার", "প্রোগ্রাম", "কোডিং", "চলক", "ধ্রুবক", "ফাংশন", "লজিক", "কীবোর্ড", "কনসোল",
-    "আউটপুট", "ইনপুট", "মেমোরি", "সার্ভার", "নেটওয়ার্ক", "বার্তা", "ডিজিটাল", "ইঞ্জিন", "уন্নয়ন", "রোটর",
-    "গোপন", "সংকেত", "গণিত", "বর্গ", "পার্থক্য", "গতিশীল", "স্থির", "বাস্তব", "স্বপ্ন", "সফলতা",
-    "ইতিহাস", "সংস Culture", "প্রকৃতি", "আকাশ", "বাতাস", "সাগর", "পাহাড়", "অরণ্য", "সূর্য", "তারা",
-    "সকাল", "সন্ধ্যা", "রাত্রি", "আলো", "ছায়া", "শান্তি", "স্বাধীনতা", "ধৈর্য", "জ্ঞান", "শিক্ষা",
-    "স্মৃতি", "অনুভূতি", "গল্প", "কবিতা", "ভাষা", "ব্যাকরণ", "শব্দ", "বাক্য", "বই", "খাতা",
-    "কলম", "বিদ্যালয়", "বিশ্ববিদ্যালয়", "শিক্ষক", "ছাত্র", "বন্ধু", "পরিবার", "সমাজ", "মানুষ", "জীবন",
-    "সময়", "ভবিষ্যত", "অতীত", "বর্তমান", "পথ", "यात्रा", "স্টেশন", "শهر", "গ্রাম", "মাঠ",
-    "ফসল", "গাছ", "ফুল", "ফল", "পাখি", "মেঘ", "বৃষ্টি", "শীত", "বসন্ত", "आनন্দ",
-    "উৎসব", "মেলা", "খেলার", "বিজয়", "গৌরব", "শ্রদ্ধা", "নিয়মিত", "বিশেষ", "কেন্দ্রীয়"
+const banglaSentences = [
+    ["আমাদের", "ছোট", "নদীতে", "বংশী", "নদীর", "মাছ", "ভেসে", "ওঠে", "চাঁদের", "আলোয়।"],
+    ["বাংলাদেশ", "একটি", "নদী", "মাতৃক", "সুন্দর", "দেশ", "আমি", "তোমায়", "ভালোবাসি।"],
+    ["পরিশ্রম", "সৌভাগ্যের", "প্রসূতি", "তাই", "সবাই", "একত্রে", "কাজ", "করুন।"],
+    ["দুঃখ", "কষ্ট", "মানুষের", "জীবনকে", "স্মার্ট", "ও", "শক্তিশালী", "করে", "তোলে।"],
+    ["হাঁস", "এবং", "বিড়াল", "পাহাড়ের", "কাছে", "কাঁচের", "থালায়", "খাবার", "খায়।"]
 ];
-
-// শব্দ থেকে ১০০০ শব্দের পুলে কনভার্ট করার ইঞ্জিন
-function generateWordPool(baseWords, totalTarget) {
-    let pool = [...baseWords];
-    let counter = 1;
-    while (pool.length < totalTarget) {
-        for (let i = 0; i < baseWords.length; i++) {
-            if (pool.length >= totalTarget) break;
-            pool.push(baseWords[i] + counter);
-        }
-        counter++;
-    }
-    return pool;
-}
-
-const englishWordPool = generateWordPool(baseEnglishWords, 1000);
-const banglaWordPool = generateWordPool(baseBanglaWords, 1000);
-
-// বাক্য তৈরি করার স্ট্রাকচার (১০টি করে শব্দের অর্থপূর্ণ অ্যারে)
-const englishSentences = [];
-const banglaSentences = [];
-
-for (let i = 0; i < 1000; i += 10) {
-    let engSlice = englishWordPool.slice(i, i + 10);
-    if (engSlice.length > 0) {
-        engSlice[engSlice.length - 1] = engSlice[engSlice.length - 1] + ".";
-        englishSentences.push(engSlice);
-    }
-    let bngSlice = banglaWordPool.slice(i, i + 10);
-    if (bngSlice.length > 0) {
-        bngSlice[bngSlice.length - 1] = bngSlice[bngSlice.length - 1] + "।";
-        banglaSentences.push(bngSlice);
-    }
-}
 
 /* ==========================================================================
    2. STATE VARIABLES
@@ -128,12 +73,12 @@ function initTest(mode) {
     errorTracker = {};
     expectedInputLength = 0;
     
-    if (timerDisplay) timerDisplay.innerText = "60s";
-    if (wpmDisplay) wpmDisplay.innerText = "0";
-    if (accuracyDisplay) accuracyDisplay.innerText = "0"; 
+    timerDisplay.innerText = "60s";
+    wpmDisplay.innerText = "0";
+    accuracyDisplay.innerText = "0"; 
     
     isBanglaMode = mode === "bn";
-    if (keyboardWrapper) keyboardWrapper.setAttribute("data-layout", mode);
+    keyboardWrapper.setAttribute("data-layout", mode);
     
     let sourcePool = isBanglaMode ? [...banglaSentences] : [...englishSentences];
     sourcePool.sort(() => Math.random() - 0.5);
@@ -141,23 +86,19 @@ function initTest(mode) {
     currentWords = [];
     let poolIndex = 0;
     
-    while (currentWords.length < 40) {
+    while (currentWords.length < 30) {
         currentWords.push(...sourcePool[poolIndex % sourcePool.length]);
         poolIndex++;
     }
     
-    if (wordCountDisplay) wordCountDisplay.innerText = `0/${currentWords.length}`;
+    wordCountDisplay.innerText = `0/${currentWords.length}`;
     renderWords();
-    
-    if (hiddenInput) {
-        hiddenInput.disabled = false;
-        hiddenInput.value = "";
-        hiddenInput.focus();
-    }
+    hiddenInput.disabled = false;
+    hiddenInput.value = "";
+    hiddenInput.focus();
 }
 
 function renderWords() {
-    if (!wordsDisplay) return;
     wordsDisplay.innerHTML = "";
     currentWords.forEach((word, wIdx) => {
         const wordSpan = document.createElement("span");
@@ -226,7 +167,7 @@ function startTimer() {
     hasStarted = true;
     timerInterval = setInterval(() => {
         timeLeft--;
-        if (timerDisplay) timerDisplay.innerText = `${timeLeft}s`;
+        timerDisplay.innerText = `${timeLeft}s`;
         updateStats();
 
         if (timeLeft <= 0) {
@@ -235,77 +176,75 @@ function startTimer() {
     }, 1000);
 }
 
-if (hiddenInput) {
-    hiddenInput.addEventListener("keydown", (e) => {
-        if (!isTestActive) { e.preventDefault(); return; }
-        if (e.key === "Backspace") {
-            handleBackspace();
-            e.preventDefault();
-        }
-    });
+hiddenInput.addEventListener("keydown", (e) => {
+    if (!isTestActive) { e.preventDefault(); return; }
+    if (e.key === "Backspace") {
+        handleBackspace();
+        e.preventDefault();
+    }
+});
 
-    hiddenInput.addEventListener("input", (e) => {
-        if (!isTestActive) return;
-        if (!hasStarted) {
-            startTimer();
-        }
+hiddenInput.addEventListener("input", (e) => {
+    if (!isTestActive) return;
+    if (!hasStarted) {
+        startTimer();
+    }
 
-        const typedVal = e.target.value;
-        
-        if (typedVal.length < expectedInputLength) {
-            handleBackspace();
-            return;
-        }
+    const typedVal = e.target.value;
+    
+    if (typedVal.length < expectedInputLength) {
+        handleBackspace();
+        return;
+    }
 
-        if (typedVal === "") return;
-        
-        const currentWord = currentWords[wordIndex];
-        const typedChar = typedVal[typedVal.length - 1];
-        totalTyped++;
+    if (typedVal === "") return;
+    
+    const currentWord = currentWords[wordIndex];
+    const typedChar = typedVal[typedVal.length - 1];
+    totalTyped++;
 
-        if (typedChar === " ") {
-            let spaceEl = document.getElementById(`w-${wordIndex}-space`);
-            if (spaceEl) {
-                const trackingKey = `w-${wordIndex}-space`;
-                if (charIndex >= currentWord.length) {
-                    spaceEl.classList.add("correct");
-                } else {
-                    spaceEl.classList.add("incorrect");
-                    if(!errorTracker[trackingKey]) { errors++; errorTracker[trackingKey] = true; }
-                }
-            }
-            wordIndex++;
-            charIndex = 0;
-            e.target.value = "";
-            expectedInputLength = 0;
-            if (wordCountDisplay) wordCountDisplay.innerText = `${wordIndex}/${currentWords.length}`;
-        } else {
-            const expectedChar = currentWord[charIndex];
-            const charEl = document.getElementById(`w-${wordIndex}-c-${charIndex}`);
-            const trackingKey = `w-${wordIndex}-c-${charIndex}`;
-
-            if (charEl) {
-                if (typedChar === expectedChar) {
-                    charEl.classList.add("correct");
-                    charEl.classList.remove("incorrect");
-                } else {
-                    charEl.classList.add("incorrect");
-                    charEl.classList.remove("correct");
-                    if(!errorTracker[trackingKey]) { errors++; errorTracker[trackingKey] = true; }
-                }
-                charIndex++;
-                expectedInputLength = typedVal.length;
+    if (typedChar === " ") {
+        let spaceEl = document.getElementById(`w-${wordIndex}-space`);
+        if (spaceEl) {
+            const trackingKey = `w-${wordIndex}-space`;
+            if (charIndex >= currentWord.length) {
+                spaceEl.classList.add("correct");
+            } else {
+                spaceEl.classList.add("incorrect");
+                if(!errorTracker[trackingKey]) { errors++; errorTracker[trackingKey] = true; }
             }
         }
+        wordIndex++;
+        charIndex = 0;
+        e.target.value = "";
+        expectedInputLength = 0;
+        wordCountDisplay.innerText = `${wordIndex}/${currentWords.length}`;
+    } else {
+        const expectedChar = currentWord[charIndex];
+        const charEl = document.getElementById(`w-${wordIndex}-c-${charIndex}`);
+        const trackingKey = `w-${wordIndex}-c-${charIndex}`;
 
-        if (wordIndex >= currentWords.length) {
-            endTest();
-        } else {
-            markCurrentChar();
-            updateStats();
+        if (charEl) {
+            if (typedChar === expectedChar) {
+                charEl.classList.add("correct");
+                charEl.classList.remove("incorrect");
+            } else {
+                charEl.classList.add("incorrect");
+                charEl.classList.remove("correct");
+                if(!errorTracker[trackingKey]) { errors++; errorTracker[trackingKey] = true; }
+            }
+            charIndex++;
+            expectedInputLength = typedVal.length;
         }
-    });
-}
+    }
+
+    if (wordIndex >= currentWords.length) {
+        endTest();
+    } else {
+        markCurrentChar();
+        updateStats();
+    }
+});
 
 /* ==========================================================================
    6. DEVICE-AGNOSTIC BACKSPACE LOGIC
@@ -344,14 +283,12 @@ function handleBackspace() {
             delete errorTracker[lastCharTrackingKey];
         }
 
-        if (wordCountDisplay) wordCountDisplay.innerText = `${wordIndex}/${currentWords.length}`;
+        wordCountDisplay.innerText = `${wordIndex}/${currentWords.length}`;
     }
     
     const proxyText = charIndex > 0 ? "x".repeat(charIndex) : "";
-    if (hiddenInput) {
-        hiddenInput.value = proxyText; 
-        expectedInputLength = proxyText.length;
-    }
+    hiddenInput.value = proxyText; 
+    expectedInputLength = proxyText.length;
     
     markCurrentChar();
     updateStats();
@@ -363,35 +300,35 @@ function handleBackspace() {
 function updateStats() {
     const timeElapsed = (60 - timeLeft) / 60;
     if (timeElapsed <= 0 || totalTyped === 0) {
-        if (wpmDisplay) wpmDisplay.innerText = "0";
-        if (accuracyDisplay) accuracyDisplay.innerText = "0";
+        wpmDisplay.innerText = "0";
+        accuracyDisplay.innerText = "0";
         return;
     }
 
     const wpm = Math.round((totalTyped / 5) / timeElapsed);
     const accuracy = Math.max(0, Math.round(((totalTyped - errors) / totalTyped) * 100));
 
-    if (wpmDisplay) wpmDisplay.innerText = wpm;
-    if (accuracyDisplay) accuracyDisplay.innerText = accuracy;
+    wpmDisplay.innerText = wpm;
+    accuracyDisplay.innerText = accuracy;
 }
 
 function endTest() {
     isTestActive = false;
     clearInterval(timerInterval);
-    if (hiddenInput) hiddenInput.disabled = true;
+    hiddenInput.disabled = true;
     
     document.querySelectorAll(".char.current").forEach(el => el.classList.remove("current"));
     document.querySelectorAll(".key.suggest-orange").forEach(el => el.classList.remove("suggest-orange"));
 
-    const finalWpm = wpmDisplay ? wpmDisplay.innerText : "0";
-    const finalAcc = accuracyDisplay ? accuracyDisplay.innerText : "0";
+    const finalWpm = wpmDisplay.innerText;
+    const finalAcc = accuracyDisplay.innerText;
 
-    if (resWpm) resWpm.innerText = finalWpm;
-    if (resAcc) resAcc.innerText = `${finalAcc}%`;
-    if (resTyped) resTyped.innerText = totalTyped;
-    if (resErrors) resErrors.innerText = errors;
+    resWpm.innerText = finalWpm;
+    resAcc.innerText = `${finalAcc}%`;
+    resTyped.innerText = totalTyped;
+    resErrors.innerText = errors;
 
-    if (resultModal) resultModal.classList.add("active");
+    resultModal.classList.add("active");
 }
 
 /* ==========================================================================
@@ -415,10 +352,11 @@ window.addEventListener("keydown", (e) => {
 
     const dataKeys = targetKey.getAttribute("data-key");
     
+    // Explicit standardizations for punctuation characters evaluation mapping
     let normalizeKey = e.key;
-    if (keyId === "Period") normalizeKey = ".";
-    if (keyId === "Comma") normalizeKey = ",";
-    if (keyId === "Semicolon") normalizeKey = ";";
+    if (normalizeKey === "Period") normalizeKey = ".";
+    if (normalizeKey === "Comma") normalizeKey = ",";
+    if (normalizeKey === "Semicolon") normalizeKey = ";";
 
     if (e.key === "Backspace" || e.key === "Shift" || e.key === "CapsLock" || e.key === "Tab" || e.key === "Enter") {
         targetKey.classList.add("press-correct");
@@ -441,26 +379,14 @@ window.addEventListener("keyup", (e) => {
 /* ==========================================================================
    9. GLOBAL APPLICATION EVENT HANDLERS
    ========================================================================== */
-if (wordsDisplay) {
-    wordsDisplay.addEventListener("click", () => { if(isTestActive && hiddenInput) hiddenInput.focus(); });
-}
-if (btnEn) {
-    btnEn.addEventListener("click", () => { btnEn.classList.add("active"); if(btnBn) btnBn.classList.remove("active"); initTest("en"); });
-}
-if (btnBn) {
-    btnBn.addEventListener("click", () => { btnBn.classList.add("active"); if(btnEn) btnEn.classList.remove("active"); initTest("bn"); });
-}
-if (restartBtn) {
-    restartBtn.addEventListener("click", () => initTest(isBanglaMode ? "bn" : "en"));
-}
-if (modalCloseBtn) {
-    modalCloseBtn.addEventListener("click", () => {
-        if (resultModal) resultModal.classList.remove("active");
-        initTest(isBanglaMode ? "bn" : "en");
-    });
-}
+wordsDisplay.addEventListener("click", () => { if(isTestActive) hiddenInput.focus(); });
+btnEn.addEventListener("click", () => { btnEn.classList.add("active"); btnBn.classList.remove("active"); initTest("en"); });
+btnBn.addEventListener("click", () => { btnBn.classList.add("active"); btnEn.classList.remove("active"); initTest("bn"); });
+restartBtn.addEventListener("click", () => initTest(isBanglaMode ? "bn" : "en"));
 
-// প্রথমবার এপ্লিকেশন লোড করার ট্র্রিগার
-document.addEventListener("DOMContentLoaded", () => {
-    initTest("en");
+modalCloseBtn.addEventListener("click", () => {
+    resultModal.classList.remove("active");
+    initTest(isBanglaMode ? "bn" : "en");
 });
+
+initTest("en");
