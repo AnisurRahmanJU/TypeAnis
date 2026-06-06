@@ -1,22 +1,28 @@
 const englishWords = [
     "Anis", "Dhaka", "Bangladesh", "The", "Quick", "Brown", "Fox", "Jumps", "Over", "Lazy", 
-    "Dog", "Javascript", "Monkeytype", "Keyboard", "Programming", "Computer", "Internet", "Software", "Developer", "Application"
+    "Dog", "Javascript", "Monkeytype", "Keyboard", "Programming", "Computer", "Internet", "Software", "Developer", "Application",
+    "System", "Code", "Project", "Design", "Interface", "Variable", "Function", "Engine", "Logic", "Master"
 ];
 
 const banglaWords = [
     "আনিস", "ঢাকা", "বাংলাদেশ", "আমাদের", "সোনার", "আমি", "তোমায়", "ভালোবাসি", "ভাষা", "আন্দোলন", 
-    "শহীদ", "স্মৃতি", "সবাই", "একত্রে", "সুন্দর", "পদ্মা", "মেঘনা", "যমুনা", "নদী", "মাতৃক"
+    "শহীদ", "স্মৃতি", "সবাই", "একত্রে", "সুন্দর", "পদ্মা", "মেঘনা", "যমুনা", "নদী", "মাতৃক",
+    "বাংলা", "চলক", "ধ্রুবক", "ফ্লোচার্ট", "বোর্ড", "পদ্ধতি", "প্রোগ্রাম", "কম্পিউটার", "স্মার্ট", "ইঞ্জিন"
 ];
 
 let currentWords = [];
 let wordIndex = 0;
 let charIndex = 0;
-let startTime = null;
-let timerInterval = null;
 let errors = 0;
 let totalTyped = 0;
 let isBanglaMode = false;
 let errorTracker = {};
+
+// Timer configuration management parameters
+let timeLeft = 60; 
+let timerInterval = null;
+let isTestActive = false;
+let hasStarted = false;
 
 const wordsDisplay = document.getElementById("words-display");
 const hiddenInput = document.getElementById("hidden-input");
@@ -24,32 +30,54 @@ const keyboardWrapper = document.getElementById("keyboard");
 const wpmDisplay = document.getElementById("wpm");
 const accuracyDisplay = document.getElementById("accuracy");
 const wordCountDisplay = document.getElementById("word-count");
+const timerDisplay = document.getElementById("timer-val");
 const btnEn = document.getElementById("btn-en");
 const btnBn = document.getElementById("btn-bn");
 const restartBtn = document.getElementById("restart-btn");
 
+// Modal presentation objects
+const resultModal = document.getElementById("result-modal");
+const modalCloseBtn = document.getElementById("modal-close-btn");
+const resWpm = document.getElementById("res-wpm");
+const resAcc = document.getElementById("res-acc");
+const resTyped = document.getElementById("res-typed");
+const resErrors = document.getElementById("res-errors");
+
 function initTest(mode) {
     clearInterval(timerInterval);
-    startTime = null;
+    timerInterval = null;
+    
+    timeLeft = 60;
+    isTestActive = true;
+    hasStarted = false;
+    
     wordIndex = 0;
     charIndex = 0;
     errors = 0;
     totalTyped = 0;
     errorTracker = {};
     
+    timerDisplay.innerText = "60s";
     wpmDisplay.innerText = "0";
-    accuracyDisplay.innerText = "100";
+    accuracyDisplay.innerText = "0"; // Stays strictly at 0% until typing begins
     
     isBanglaMode = mode === "bn";
-    
-    // Dynamically change layout configuration on the wrapper object
     keyboardWrapper.setAttribute("data-layout", mode);
     
-    currentWords = isBanglaMode ? [...banglaWords] : [...englishWords];
-    currentWords.sort(() => Math.random() - 0.5);
+    // Core Change: Build a flat collection pool shuffled to extract exactly 30 words per session load
+    let sourcePool = isBanglaMode ? [...banglaWords] : [...englishWords];
+    
+    // Dynamic fallback generation to secure 30 items if required
+    while (sourcePool.length < 30) {
+        sourcePool.push(...sourcePool);
+    }
+    
+    // Sort array elements arbitrarily and capture exactly the first 30 indexes
+    currentWords = sourcePool.sort(() => Math.random() - 0.5).slice(0, 30);
     
     wordCountDisplay.innerText = `0/${currentWords.length}`;
     renderWords();
+    hiddenInput.disabled = false;
     hiddenInput.value = "";
     hiddenInput.focus();
 }
@@ -83,12 +111,10 @@ function renderWords() {
 
 function updateSuggestedKey() {
     document.querySelectorAll(".key.suggest-orange").forEach(el => el.classList.remove("suggest-orange"));
-    
-    if (wordIndex >= currentWords.length) return;
+    if (!isTestActive || wordIndex >= currentWords.length) return;
     
     const currentWord = currentWords[wordIndex];
     let targetChar = " ";
-    
     if (charIndex < currentWord.length) {
         targetChar = currentWord[charIndex];
     }
@@ -105,7 +131,8 @@ function updateSuggestedKey() {
 
 function markCurrentChar() {
     document.querySelectorAll(".char.current").forEach(el => el.classList.remove("current"));
-    
+    if (!isTestActive) return;
+
     let currentEl = document.getElementById(`w-${wordIndex}-c-${charIndex}`);
     if (!currentEl && wordIndex < currentWords.length - 1) {
         currentEl = document.getElementById(`w-${wordIndex}-space`);
@@ -117,7 +144,21 @@ function markCurrentChar() {
     updateSuggestedKey();
 }
 
+function startTimer() {
+    hasStarted = true;
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.innerText = `${timeLeft}s`;
+        updateStats();
+
+        if (timeLeft <= 0) {
+            endTest();
+        }
+    }, 1000);
+}
+
 hiddenInput.addEventListener("keydown", (e) => {
+    if (!isTestActive) { e.preventDefault(); return; }
     if (e.key === "Backspace") {
         handleBackspace();
         e.preventDefault();
@@ -125,9 +166,9 @@ hiddenInput.addEventListener("keydown", (e) => {
 });
 
 hiddenInput.addEventListener("input", (e) => {
-    if (!startTime) {
-        startTime = new Date();
-        timerInterval = setInterval(updateStats, 1000);
+    if (!isTestActive) return;
+    if (!hasStarted) {
+        startTimer();
     }
 
     const typedVal = e.target.value;
@@ -168,12 +209,12 @@ hiddenInput.addEventListener("input", (e) => {
         }
     }
 
+    // Auto-finish early if the user finishes all 30 loaded words within 1 minute
     if (wordIndex >= currentWords.length) {
-        clearInterval(timerInterval);
-        updateStats();
-        alert("Completed successfully!");
+        endTest();
     } else {
         markCurrentChar();
+        updateStats();
     }
 });
 
@@ -184,23 +225,33 @@ function handleBackspace() {
         if (charEl) charEl.classList.remove("correct", "incorrect");
         
         const currentTrackingKey = `w-${wordIndex}-c-${charIndex}`;
-        if(errorTracker[currentTrackingKey]) {
+        if (errorTracker[currentTrackingKey]) {
             errors = Math.max(0, errors - 1);
             delete errorTracker[currentTrackingKey];
         }
     } else if (wordIndex > 0 && charIndex === 0) {
         wordIndex--;
         const prevWord = currentWords[wordIndex];
-        charIndex = prevWord.length;
         
         const spaceEl = document.getElementById(`w-${wordIndex}-space`);
         if (spaceEl) spaceEl.classList.remove("correct", "incorrect");
         
         const spaceTrackingKey = `w-${wordIndex}-space`;
-        if(errorTracker[spaceTrackingKey]) {
+        if (errorTracker[spaceTrackingKey]) {
             errors = Math.max(0, errors - 1);
             delete errorTracker[spaceTrackingKey];
         }
+
+        charIndex = prevWord.length - 1;
+        const lastCharEl = document.getElementById(`w-${wordIndex}-c-${charIndex}`);
+        if (lastCharEl) lastCharEl.classList.remove("correct", "incorrect");
+
+        const lastCharTrackingKey = `w-${wordIndex}-c-${charIndex}`;
+        if (errorTracker[lastCharTrackingKey]) {
+            errors = Math.max(0, errors - 1);
+            delete errorTracker[lastCharTrackingKey];
+        }
+
         wordCountDisplay.innerText = `${wordIndex}/${currentWords.length}`;
     }
     
@@ -210,15 +261,37 @@ function handleBackspace() {
 }
 
 function updateStats() {
-    if (!startTime) return;
-    const timeElapsed = (new Date() - startTime) / 1000 / 60;
-    if (timeElapsed <= 0) return;
+    const timeElapsed = (60 - timeLeft) / 60;
+    if (timeElapsed <= 0 || totalTyped === 0) {
+        wpmDisplay.innerText = "0";
+        accuracyDisplay.innerText = "0";
+        return;
+    }
 
     const wpm = Math.round((totalTyped / 5) / timeElapsed);
-    const accuracy = totalTyped > 0 ? Math.max(0, Math.round(((totalTyped - errors) / totalTyped) * 100)) : 100;
+    const accuracy = Math.max(0, Math.round(((totalTyped - errors) / totalTyped) * 100));
 
     wpmDisplay.innerText = wpm;
     accuracyDisplay.innerText = accuracy;
+}
+
+function endTest() {
+    isTestActive = false;
+    clearInterval(timerInterval);
+    hiddenInput.disabled = true;
+    
+    document.querySelectorAll(".char.current").forEach(el => el.classList.remove("current"));
+    document.querySelectorAll(".key.suggest-orange").forEach(el => el.classList.remove("current"));
+
+    const finalWpm = wpmDisplay.innerText;
+    const finalAcc = accuracyDisplay.innerText;
+
+    resWpm.innerText = finalWpm;
+    resAcc.innerText = `${finalAcc}%`;
+    resTyped.innerText = totalTyped;
+    resErrors.innerText = errors;
+
+    resultModal.classList.add("active");
 }
 
 window.addEventListener("keydown", (e) => {
@@ -226,14 +299,14 @@ window.addEventListener("keydown", (e) => {
     const targetKey = document.getElementById(keyId);
     if (!targetKey) return;
 
-    if (wordIndex >= currentWords.length) {
+    if (!isTestActive) {
         targetKey.classList.add("press-correct");
         return;
     }
 
     const currentWord = currentWords[wordIndex];
     let expectedChar = " ";
-    if (charIndex < currentWord.length) {
+    if (currentWord && charIndex < currentWord.length) {
         expectedChar = currentWord[charIndex];
     }
 
@@ -257,9 +330,14 @@ window.addEventListener("keyup", (e) => {
     updateSuggestedKey();
 });
 
-wordsDisplay.addEventListener("click", () => hiddenInput.focus());
+wordsDisplay.addEventListener("click", () => { if(isTestActive) hiddenInput.focus(); });
 btnEn.addEventListener("click", () => { btnEn.classList.add("active"); btnBn.classList.remove("active"); initTest("en"); });
 btnBn.addEventListener("click", () => { btnBn.classList.add("active"); btnEn.classList.remove("active"); initTest("bn"); });
 restartBtn.addEventListener("click", () => initTest(isBanglaMode ? "bn" : "en"));
+
+modalCloseBtn.addEventListener("click", () => {
+    resultModal.classList.remove("active");
+    initTest(isBanglaMode ? "bn" : "en");
+});
 
 initTest("en");
