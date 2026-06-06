@@ -1,0 +1,269 @@
+:root {
+    --bg-color: #323437;
+    --main-color: #e2b714;
+    --caret-color: #e2b714;
+    --sub-color: #646669;
+    --text-color: #d1d0c5;
+    --error-color: #ca4754;
+    --success-color: #43a047;
+    --suggest-color: #e65100;
+    --key-bg: #2c2e31;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace, Arial;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px 0;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 90%;
+    max-width: 950px;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-family: sans-serif;
+}
+
+.brand {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: var(--text-color);
+    letter-spacing: -1px;
+}
+
+.brand .logo-icon {
+    color: var(--main-color);
+    margin-right: 4px;
+}
+
+.modes button {
+    background: none;
+    border: none;
+    color: var(--sub-color);
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin-right: 12px;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.modes button.active, .modes button:hover {
+    color: var(--text-color);
+}
+
+.stats {
+    display: flex;
+    gap: 25px;
+}
+
+.stat-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 1.4rem;
+    color: var(--main-color);
+    font-weight: bold;
+    line-height: 1.1rem;
+}
+
+.stat-box .label {
+    font-size: 0.7rem;
+    color: var(--sub-color);
+    text-transform: uppercase;
+    margin-bottom: 3px;
+    letter-spacing: 1px;
+}
+
+#restart-btn {
+    margin: 0 auto 15px auto;
+    display: block;
+    background: none;
+    border: none;
+    color: var(--sub-color);
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+#restart-btn:hover {
+    color: var(--text-color);
+}
+
+.type-area-container {
+    position: relative;
+    margin-bottom: 25px;
+    padding: 5px;
+    min-height: 80px;
+}
+
+#hidden-input {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+}
+
+.words-display {
+    font-size: 1.6rem;
+    line-height: 2.4rem;
+    word-wrap: break-word;
+    letter-spacing: 1px;
+    user-select: none;
+    color: var(--sub-color);
+    text-align: justify;
+}
+
+.word {
+    display: inline-block;
+    margin-right: 12px;
+}
+
+.char {
+    position: relative;
+    transition: color 0.1s;
+}
+
+.char.correct {
+    color: var(--text-color);
+}
+
+.char.incorrect {
+    color: var(--error-color);
+    background-color: rgba(202, 71, 84, 0.12);
+    border-radius: 2px;
+}
+
+.char.current::before {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top: 10%;
+    width: 2px;
+    height: 80%;
+    background-color: var(--caret-color);
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+/* Mechanical Style Virtual Keyboard Container */
+.keyboard {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #1e1f21;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+}
+
+.key {
+    background: var(--key-bg);
+    border: 1px solid #3a3d40;
+    border-radius: 6px;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 0px #151617;
+    transition: background 0.05s, color 0.05s, transform 0.05s;
+    user-select: none;
+}
+
+.key.modifier { font-size: 0.7rem; align-items: flex-start; padding-left: 8px; color: #505559; }
+.key.backspace { width: 95px; align-items: flex-end; padding-right: 10px; }
+.key.tab { width: 75px; }
+.key.caps { width: 85px; }
+.key.enter { width: 90px; align-items: flex-end; padding-right: 10px; }
+.key.shift-l { width: 110px; }
+.key.shift-r { width: 110px; align-items: flex-end; padding-right: 10px; }
+.key.space { width: 330px; color: #505559; font-size: 0.75rem; }
+
+.key span { display: block; text-align: center; transition: font-size 0.15s, color 0.15s; }
+
+/* DYNAMIC INTERFACE SELECTORS */
+
+/* Layout Option A: Full English Display Mode */
+.keyboard[data-layout="en"] .key .en {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+.keyboard[data-layout="en"] .key .bn {
+    font-size: 0.0rem; /* Invisible structure */
+    color: transparent;
+    opacity: 0;
+}
+
+/* Layout Option B: Full Bangla Display Mode */
+.keyboard[data-layout="bn"] .key .bn {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text-color);
+}
+.keyboard[data-layout="bn"] .key .en {
+    font-size: 0.0rem; /* Invisible structure */
+    color: transparent;
+    opacity: 0;
+}
+
+/* 1. Next Key Prompt State: Soft Orange Highlight */
+.key.suggest-orange {
+    background: rgba(230, 81, 0, 0.22) !important;
+    border-color: var(--suggest-color) !important;
+    box-shadow: 0 2px 8px rgba(230, 81, 0, 0.35);
+}
+.key.suggest-orange span {
+    color: #ffb74d !important;
+}
+
+/* 2. Key Typed Properly State: Solid Green Active Feedback */
+.key.press-correct {
+    background: var(--success-color) !important;
+    box-shadow: 0 0px 0px transparent !important;
+    transform: translateY(2px);
+}
+.key.press-correct span, .key.press-correct {
+    color: #fff !important;
+}
+
+/* 3. Key Typed Wrongly State: Solid Red Active Feedback */
+.key.press-error {
+    background: var(--error-color) !important;
+    box-shadow: 0 0px 0px transparent !important;
+    transform: translateY(2px);
+}
+.key.press-error span, .key.press-error {
+    color: #fff !important;
+}
+
+@media (max-width: 768px) {
+    .keyboard { display: none; }
+    .header { flex-direction: column; gap: 15px; }
+    .stats { width: 100%; justify-content: space-around; }
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeAnis - Dynamic Keyboard Master</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Smart Header -->
+        <div class="header">
+            <div class="brand">
+                <span class="logo-icon">⌨</span> TypeAnis
+            </div>
+            <div class="modes">
+                <button id="btn-en" class="active">English</button>
+                <button id="btn-bn">বাংলা (Bijoy)</button>
+            </div>
+            <div class="stats">
+                <div class="stat-box"><span class="label">wpm</span><span id="wpm">0</span></div>
+                <div class="stat-box"><span class="label">acc</span><span id="accuracy">100</span>%</div>
+                <div class="stat-box"><span class="label">words</span><span id="word-count">0/20</span></div>
+            </div>
+        </div>
+
+        <!-- Typing Test Area -->
+        <div class="type-area-container">
+            <input type="text" id="hidden-input" autocomplete="off" autofocus>
+            <div id="words-display" class="words-display"></div>
+        </div>
+
+        <button id="restart-btn">🗘 Restart Test</button>
+
+        <!-- Full Realistic Keyboard (Defaults to English layout state) -->
+        <div class="keyboard" id="keyboard" data-layout="en">
+            <!-- Row 0 -->
+            <div class="row">
+                <div class="key modifier small" id="Backquote">~</div>
+                <div class="key" id="Digit1" data-key="1 ১"><span class="bn">১</span><span class="en">1</span></div>
+                <div class="key" id="Digit2" data-key="2 ২"><span class="bn">২</span><span class="en">2</span></div>
+                <div class="key" id="Digit3" data-key="3 ৩"><span class="bn">৩</span><span class="en">3</span></div>
+                <div class="key" id="Digit4" data-key="4 ৪"><span class="bn">৪</span><span class="en">4</span></div>
+                <div class="key" id="Digit5" data-key="5 ৫"><span class="bn">৫</span><span class="en">5</span></div>
+                <div class="key" id="Digit6" data-key="6 ৬"><span class="bn">৬</span><span class="en">6</span></div>
+                <div class="key" id="Digit7" data-key="7 ৭"><span class="bn">৭</span><span class="en">7</span></div>
+                <div class="key" id="Digit8" data-key="8 ৮"><span class="bn">৮</span><span class="en">8</span></div>
+                <div class="key" id="Digit9" data-key="9 ৯"><span class="bn">৯</span><span class="en">9</span></div>
+                <div class="key" id="Digit0" data-key="0 ০"><span class="bn">০</span><span class="en">0</span></div>
+                <div class="key" id="Minus" data-key="-">-</div>
+                <div class="key" id="Equal" data-key="+">+</div>
+                <div class="key modifier backspace" id="Backspace">Backspace</div>
+            </div>
+            <!-- Row 1 -->
+            <div class="row">
+                <div class="key modifier tab" id="Tab">Tab</div>
+                <div class="key" id="KeyQ" data-key="q Q ং ৎ"><span class="bn">ং / ৎ</span><span class="en">Q</span></div>
+                <div class="key" id="KeyW" data-key="w W ্য ূ"><span class="bn">্য / ূ</span><span class="en">W</span></div>
+                <div class="key" id="KeyE" data-key="e E ড ঢ"><span class="bn">ড / ঢ</span><span class="en">E</span></div>
+                <div class="key" id="KeyR" data-key="r R প ফ"><span class="bn">প / ফ</span><span class="en">R</span></div>
+                <div class="key" id="KeyT" data-key="t T ট ঠ"><span class="bn">ট / ঠ</span><span class="en">T</span></div>
+                <div class="key" id="KeyY" data-key="y Y চ ছ"><span class="bn">চ / ছ</span><span class="en">Y</span></div>
+                <div class="key" id="KeyU" data-key="u U ஜ ঝ"><span class="bn">জ / ঝ</span><span class="en">U</span></div>
+                <div class="key" id="KeyI" data-key="i I হ ঞ"><span class="bn">হ / ঞ</span><span class="en">I</span></div>
+                <div class="key" id="KeyO" data-key="o O গ ঘ"><span class="bn">গ / ঘ</span><span class="en">O</span></div>
+                <div class="key" id="KeyP" data-key="p P ড় ঢ়"><span class="bn">ড় / ঢ়</span><span class="en">P</span></div>
+                <div class="key" id="BracketLeft">[</div>
+                <div class="key" id="BracketRight">]</div>
+            </div>
+            <!-- Row 2 -->
+            <div class="row">
+                <div class="key modifier caps" id="CapsLock">Caps</div>
+                <div class="key" id="KeyA" data-key="a A ৃ া"><span class="bn">ৃ / া</span><span class="en">A</span></div>
+                <div class="key" id="KeyS" data-key="s S ু ূ"><span class="bn">ু / ূ</span><span class="en">S</span></div>
+                <div class="key" id="KeyD" data-key="d D ি ী"><span class="bn">ি / ী</span><span class="en">D</span></div>
+                <div class="key" id="KeyF" data-key="f F া অ"><span class="bn">া / অ</span><span class="en">F</span></div>
+                <div class="key" id="KeyG" data-key="g G ্ ক"><span class="bn">্ / ক</span><span class="en">G</span></div>
+                <div class="key" id="KeyH" data-key="h H অ আ"><span class="bn">অ / আ</span><span class="en">H</span></div>
+                <div class="key" id="KeyJ" data-key="j J ত থ"><span class="bn">ত / থ</span><span class="en">J</span></div>
+                <div class="key" id="KeyK" data-key="k K ক খ"><span class="bn">ক / খ</span><span class="en">K</span></div>
+                <div class="key" id="KeyL" data-key="l L ত থ"><span class="bn">ত / থ</span><span class="en">L</span></div>
+                <div class="key" id="Semicolon">;</div>
+                <div class="key modifier enter" id="Enter">Enter</div>
+            </div>
+            <!-- Row 3 -->
+            <div class="row">
+                <div class="key modifier shift-l" id="ShiftLeft">Shift</div>
+                <div class="key" id="KeyZ" data-key="z Z ্র ্য"><span class="bn">্র / ্য</span><span class="en">Z</span></div>
+                <div class="key" id="KeyX" data-key="x X ও ঔ"><span class="bn">ও / ঔ</span><span class="en">X</span></div>
+                <div class="key" id="KeyC" data-key="c C এ ঐ"><span class="bn">এ / ঐ</span><span class="en">C</span></div>
+                <div class="key" id="KeyV" data-key="v V র ল"><span class="bn">র / ল</span><span class="en">V</span></div>
+                <div class="key" id="KeyB" data-key="b B ন ণ"><span class="bn">ন / ণ</span><span class="en">B</span></div>
+                <div class="key" id="KeyN" data-key="n N স ষ"><span class="bn">স / ষ</span><span class="en">N</span></div>
+                <div class="key" id="KeyM" data-key="m M ম শ"><span class="bn">ম / শ</span><span class="en">M</span></div>
+                <div class="key" id="Comma">,</div>
+                <div class="key" id="Period">.</div>
+                <div class="key modifier shift-r" id="ShiftRight">Shift</div>
+            </div>
+            <!-- Row 4 -->
+            <div class="row">
+                <div class="key space" id="Space" data-key=" ">Space</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="type.js"></script>
+</body>
+</html>
