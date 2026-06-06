@@ -308,3 +308,12 @@ body {
     .keyboard { display: none; } /* Safely hides mechanical layout on touch viewports */
     .header { flex-direction: column; gap: 15px; }
 }
+
+.brand-link {
+    color: inherit; /* Keeps your default text colors intact */
+    text-decoration: none;
+    display: inline-block;
+}
+.brand-link:hover {
+    opacity: 0.85;  /* Subtle animation hint that it is a link when hovered */
+}
