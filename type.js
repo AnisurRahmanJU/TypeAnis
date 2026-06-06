@@ -1,20 +1,46 @@
 /* ==========================================================================
    1. WORD & SENTENCE POOLS (Meaningful Sentences with Punctuation)
    ========================================================================== */
-const englishSentences = [
-    ["The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog."],
-    ["Practice", "makes", "a", "man", "perfect", "in", "every", "aspect", "of", "life."],
-    ["Honesty", "is", "the", "best", "policy", "to", "build", "a", "great", "network."],
-    ["Technology", "is", "changing", "the", "world", "with", "amazing", "software", "tools."],
-    ["Keep", "your", "eyes", "on", "the", "stars", "and", "your", "feet", "on", "the", "ground."]
+const baseEnglishWords = [
+    // Original Words
+    "The", "quick", "brown", "fox", "jumps", "over", "lazy", "dog", "Practice", "makes", 
+    "perfect", "aspect", "life", "Honesty", "best", "policy", "build", "great", "network", "Technology", 
+    "changing", "world", "amazing", "software", "tools", "Keep", "your", "eyes", "stars", "feet", 
+    "ground", "science", "future", "system", "device", "creative", "engine", "developer", "digital", "smart",
+    "matrix", "cipher", "secret", "crypto", "quantum", "logical", "binary", "terminal", "keyboard", "rotor",
+
+    // Added 100 More Popular & Technical Words
+    "algorithm", "security", "password", "network", "server", "database", "cloud", "internet", "website", "application",
+    "compiler", "function", "variable", "constant", "syntax", "hacker", "firewall", "protocol", "packet", "signal",
+    "voltage", "circuit", "resistor", "current", "display", "monitor", "memory", "storage", "backup", "recovery",
+    "process", "thread", "kernel", "graphics", "interface", "hardware", "firmware", "sensor", "module", "library",
+    "success", "journey", "achieve", "believe", "inspire", "imagine", "create", "discover", "explore", "connect",
+    "together", "history", "culture", "nature", "weather", "climate", "energy", "planet", "galaxy", "universe",
+    "freedom", "justice", "peace", "wisdom", "knowledge", "honour", "courage", "patience", "silence", "shadow",
+    "morning", "sunset", "journey", "station", "railway", "airport", "highway", "traffic", "vehicle", "electric",
+    "machine", "factory", "product", "quality", "service", "support", "message", "console", "channel", "stream",
+    "frequent", "regular", "special", "central", "federal", "dynamic", "static", "virtual", "optical", "acoustic"
 ];
 
-const banglaSentences = [
-    ["আমাদের", "ছোট", "নদীতে", "বংশী", "নদীর", "মাছ", "ভেসে", "ওঠে", "চাঁদের", "আলোয়।"],
-    ["বাংলাদেশ", "একটি", "নদী", "মাতৃক", "সুন্দর", "দেশ", "আমি", "তোমায়", "ভালোবাসি।"],
-    ["পরিশ্রম", "সৌভাগ্যের", "প্রসূতি", "তাই", "সবাই", "একত্রে", "কাজ", "করুন।"],
-    ["দুঃখ", "কষ্ট", "মানুষের", "জীবনকে", "স্মার্ট", "ও", "শক্তিশালী", "করে", "তোলে।"],
-    ["হাঁস", "এবং", "বিড়াল", "পাহাড়ের", "কাছে", "কাঁচের", "থালায়", "খাবার", "খায়।"]
+const baseBanglaWords = [
+    // Original Base Words
+    "আমাদের", "ছোট", "নদীতে", "বংশী", "নদীর", "মাছ", "ভেসে", "ওঠে", "চাঁদের", "আলোয়",
+    "বাংলাদেশ", "একটি", "নদী", "মাতৃক", "সুন্দর", "দেশ", "আমি", "তোমায়", "ভালোবাসি", "পরিশ্রম",
+    "সৌভাগ্যের", "প্রসূতি", "তাই", "সবাই", "একত্রে", "কাজ", "করুন", "দুঃখ", "কষ্ট", "মানুষের",
+    "জীবনকে", "স্মার্ট", "ও", "শক্তিশালী", "করে", "তোলে", "হাঁস", "এবং", "বিড়াল", "পাহাড়ের",
+    "কাছে", "কাঁচের", "থালায়", "খাবার", "খায়", "সোনার", "বাংলা", "সবুজ", "श्यामল", "চিরদিন",
+
+    // Added 100 More Popular, Linguistic & Technical Words
+    "প্রযুক্তি", "সফটওয়্যার", "প্রোগ্রাম", "কোডিং", "চলক", "ধ্রুবক", "ফাংশন", "লজিক", "কীবোর্ড", "কনসোল",
+    "আউটপুট", "ইনপুট", "মেমোরি", "সার্ভার", "নেটওয়ার্ক", "বার্তা", "ডিজিটাল", "ইঞ্জিন", "উন্নয়ন", "রোটর",
+    "গোপন", "সংকেত", "গণিত", "বর্গ", "পার্থক্য", "গতিশীল", "স্থির", "বাস্তব", "স্বপ্ন", "সফলতা",
+    "ইতিহাস", "সংস্কৃতি", "প্রকৃতি", "আকাশ", "বাতাস", "সাগর", "পাহাড়", "অরণ্য", "সূর্য", "তারা",
+    "সকাল", "সন্ধ্যা", "রাত্রি", "আলো", "ছায়া", "শান্তি", "স্বাধীনতা", "ধৈর্য", "জ্ঞান", "শিক্ষা",
+    "স্মৃতি", "অনুভূতি", "গল্প", "কবিতা", "ভাষা", "ব্যাকরণ", "শব্দ", "বাক্য", "বই", "খাতা",
+    "কলম", "বিদ্যালয়", "বিশ্ববিদ্যালয়", "শিক্ষক", "ছাত্র", "বন্ধু", "পরিবার", "সমাজ", "মানুষ", "জীবন",
+    "সময়", "ভবিষ্যত", "অতীত", "বর্তমান", "পথ", "যাত্রা", "স্টেশন", "শহর", "গ্রাম", "মাঠ",
+    "ফসল", "গাছ", "ফুল", "ফল", "পাখি", "মেঘ", "বৃষ্টি", "শীত", "বসন্ত", "আনন্দ",
+    "উৎসব", "মেলা", "খেলার", "মাঠ", "বিজয়", "গৌরব", "শ্রদ্ধা", "নিয়মিত", "বিশেষ", "কেন্দ্রীয়"
 ];
 
 /* ==========================================================================
