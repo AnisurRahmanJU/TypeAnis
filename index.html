@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TypeAnis - Dynamic Keyboard Master</title>
+    <title>TypeAnis - 1 Minute Typing Master</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <!-- Smart Header -->
         <div class="header">
             <div class="brand">
                 <span class="logo-icon">⌨</span> TypeAnis
@@ -18,13 +17,13 @@
                 <button id="btn-bn">বাংলা (Bijoy)</button>
             </div>
             <div class="stats">
+                <div class="stat-box"><span class="label">time left</span><span id="timer-val">60s</span></div>
                 <div class="stat-box"><span class="label">wpm</span><span id="wpm">0</span></div>
-                <div class="stat-box"><span class="label">acc</span><span id="accuracy">100</span>%</div>
+                <div class="stat-box"><span class="label">acc</span><span id="accuracy">0</span>%</div>
                 <div class="stat-box"><span class="label">words</span><span id="word-count">0/20</span></div>
             </div>
         </div>
 
-        <!-- Typing Test Area -->
         <div class="type-area-container">
             <input type="text" id="hidden-input" autocomplete="off" autofocus>
             <div id="words-display" class="words-display"></div>
@@ -32,9 +31,7 @@
 
         <button id="restart-btn">🗘 Restart Test</button>
 
-        <!-- Full Realistic Keyboard (Defaults to English layout state) -->
         <div class="keyboard" id="keyboard" data-layout="en">
-            <!-- Row 0 -->
             <div class="row">
                 <div class="key modifier small" id="Backquote">~</div>
                 <div class="key" id="Digit1" data-key="1 ১"><span class="bn">১</span><span class="en">1</span></div>
@@ -51,7 +48,6 @@
                 <div class="key" id="Equal" data-key="+">+</div>
                 <div class="key modifier backspace" id="Backspace">Backspace</div>
             </div>
-            <!-- Row 1 -->
             <div class="row">
                 <div class="key modifier tab" id="Tab">Tab</div>
                 <div class="key" id="KeyQ" data-key="q Q ং ৎ"><span class="bn">ং / ৎ</span><span class="en">Q</span></div>
@@ -60,14 +56,13 @@
                 <div class="key" id="KeyR" data-key="r R প ফ"><span class="bn">প / ফ</span><span class="en">R</span></div>
                 <div class="key" id="KeyT" data-key="t T ট ঠ"><span class="bn">ট / ঠ</span><span class="en">T</span></div>
                 <div class="key" id="KeyY" data-key="y Y চ ছ"><span class="bn">চ / ছ</span><span class="en">Y</span></div>
-                <div class="key" id="KeyU" data-key="u U ஜ ঝ"><span class="bn">জ / ঝ</span><span class="en">U</span></div>
+                <div class="key" id="KeyU" data-key="u U জ ঝ"><span class="bn">জ / ঝ</span><span class="en">U</span></div>
                 <div class="key" id="KeyI" data-key="i I হ ঞ"><span class="bn">হ / ঞ</span><span class="en">I</span></div>
                 <div class="key" id="KeyO" data-key="o O গ ঘ"><span class="bn">গ / ঘ</span><span class="en">O</span></div>
                 <div class="key" id="KeyP" data-key="p P ড় ঢ়"><span class="bn">ড় / ঢ়</span><span class="en">P</span></div>
                 <div class="key" id="BracketLeft">[</div>
                 <div class="key" id="BracketRight">]</div>
             </div>
-            <!-- Row 2 -->
             <div class="row">
                 <div class="key modifier caps" id="CapsLock">Caps</div>
                 <div class="key" id="KeyA" data-key="a A ৃ া"><span class="bn">ৃ / া</span><span class="en">A</span></div>
@@ -82,7 +77,6 @@
                 <div class="key" id="Semicolon">;</div>
                 <div class="key modifier enter" id="Enter">Enter</div>
             </div>
-            <!-- Row 3 -->
             <div class="row">
                 <div class="key modifier shift-l" id="ShiftLeft">Shift</div>
                 <div class="key" id="KeyZ" data-key="z Z ্র ্য"><span class="bn">্র / ্য</span><span class="en">Z</span></div>
@@ -96,10 +90,23 @@
                 <div class="key" id="Period">.</div>
                 <div class="key modifier shift-r" id="ShiftRight">Shift</div>
             </div>
-            <!-- Row 4 -->
             <div class="row">
                 <div class="key space" id="Space" data-key=" ">Space</div>
             </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="result-modal">
+        <div class="modal-box">
+            <h2>⏱ Time's Up!</h2>
+            <p class="modal-sub">Here is your typing summary for the last 1 minute:</p>
+            <div class="modal-grid">
+                <div class="m-card"><span class="num" id="res-wpm">0</span><span class="lbl">Words Per Min</span></div>
+                <div class="m-card"><span class="num" id="res-acc">0%</span><span class="lbl">Final Accuracy</span></div>
+                <div class="m-card"><span class="num" id="res-typed">0</span><span class="lbl">Keys Typed</span></div>
+                <div class="m-card"><span class="num text-red" id="res-errors">0</span><span class="lbl">Mistakes Made</span></div>
+            </div>
+            <button id="modal-close-btn">Try Again</button>
         </div>
     </div>
 
