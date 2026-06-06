@@ -1,3 +1,6 @@
+/* ==========================================================================
+   1. GLOBAL VARIABLES & RESET
+   ========================================================================== */
 :root {
     --bg-color: #323437;
     --main-color: #e2b714;
@@ -30,12 +33,16 @@ body {
     flex-direction: column;
 }
 
+/* ==========================================================================
+   2. HEADER & STATS BAR (Spaced Out Edge-to-Edge)
+   ========================================================================== */
 .header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+    justify-content: space-between; /* Pushes brand left, stats right, modes center */
+    align-items: center;           /* Vertically aligns content line items */
+    margin-bottom: 25px;
     font-family: sans-serif;
+    width: 100%;
 }
 
 .brand {
@@ -88,22 +95,9 @@ body {
     letter-spacing: 1px;
 }
 
-#restart-btn {
-    margin: 0 auto 15px auto;
-    display: block;
-    background: none;
-    border: none;
-    color: var(--sub-color);
-    padding: 8px 16px;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: color 0.2s;
-}
-
-#restart-btn:hover {
-    color: var(--text-color);
-}
-
+/* ==========================================================================
+   3. TYPING TEST FIELD AREA
+   ========================================================================== */
 .type-area-container {
     position: relative;
     margin-bottom: 25px;
@@ -124,7 +118,7 @@ body {
     letter-spacing: 1px;
     user-select: none;
     color: var(--sub-color);
-    text-align: justify;
+    text-align: justify; /* Cleans up line breaks */
 }
 
 .word {
@@ -132,6 +126,7 @@ body {
     margin-right: 12px;
 }
 
+/* Character States */
 .char {
     position: relative;
     transition: color 0.1s;
@@ -147,6 +142,7 @@ body {
     border-radius: 2px;
 }
 
+/* Flashing Caret Cursor Styling */
 .char.current::before {
     content: '';
     position: absolute;
@@ -162,7 +158,25 @@ body {
     50% { opacity: 0; }
 }
 
-/* Mechanical Style Virtual Keyboard Container */
+#restart-btn {
+    margin: 0 auto 15px auto;
+    display: block;
+    background: none;
+    border: none;
+    color: var(--sub-color);
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+#restart-btn:hover {
+    color: var(--text-color);
+}
+
+/* ==========================================================================
+   4. MECHANICAL VIRTUAL KEYBOARD
+   ========================================================================== */
 .keyboard {
     display: flex;
     flex-direction: column;
@@ -175,7 +189,7 @@ body {
 
 .row {
     display: flex;
-    justify-content: center;
+    justify-content: center; /* Symmetrically balances standard keys horizontally */
     gap: 6px;
     width: 100%;
 }
@@ -195,6 +209,7 @@ body {
     user-select: none;
 }
 
+/* Modifier Keys Width & Alignments */
 .key.modifier { font-size: 0.7rem; align-items: flex-start; padding-left: 8px; color: #505559; }
 .key.backspace { width: 95px; align-items: flex-end; padding-right: 10px; }
 .key.tab { width: 75px; }
@@ -206,64 +221,90 @@ body {
 
 .key span { display: block; text-align: center; transition: font-size 0.15s, color 0.15s; }
 
-/* DYNAMIC INTERFACE SELECTORS */
+/* Language Layout Presentation Handlers */
+.keyboard[data-layout="en"] .key .en { font-size: 0.95rem; font-weight: bold; color: var(--text-color); }
+.keyboard[data-layout="en"] .key .bn { font-size: 0.0rem; color: transparent; opacity: 0; }
+.keyboard[data-layout="bn"] .key .bn { font-size: 1.05rem; font-weight: 500; color: var(--text-color); }
+.keyboard[data-layout="bn"] .key .en { font-size: 0.0rem; color: transparent; opacity: 0; }
 
-/* Layout Option A: Full English Display Mode */
-.keyboard[data-layout="en"] .key .en {
-    font-size: 0.95rem;
-    font-weight: bold;
-    color: var(--text-color);
-}
-.keyboard[data-layout="en"] .key .bn {
-    font-size: 0.0rem; /* Invisible structure */
-    color: transparent;
-    opacity: 0;
-}
-
-/* Layout Option B: Full Bangla Display Mode */
-.keyboard[data-layout="bn"] .key .bn {
-    font-size: 1.05rem;
-    font-weight: 500;
-    color: var(--text-color);
-}
-.keyboard[data-layout="bn"] .key .en {
-    font-size: 0.0rem; /* Invisible structure */
-    color: transparent;
-    opacity: 0;
-}
-
-/* 1. Next Key Prompt State: Soft Orange Highlight */
+/* Dynamic Interactive Typing Feedback States */
 .key.suggest-orange {
     background: rgba(230, 81, 0, 0.22) !important;
     border-color: var(--suggest-color) !important;
     box-shadow: 0 2px 8px rgba(230, 81, 0, 0.35);
 }
-.key.suggest-orange span {
-    color: #ffb74d !important;
-}
+.key.suggest-orange span { color: #ffb74d !important; }
 
-/* 2. Key Typed Properly State: Solid Green Active Feedback */
 .key.press-correct {
     background: var(--success-color) !important;
     box-shadow: 0 0px 0px transparent !important;
     transform: translateY(2px);
 }
-.key.press-correct span, .key.press-correct {
-    color: #fff !important;
-}
+.key.press-correct span, .key.press-correct { color: #fff !important; }
 
-/* 3. Key Typed Wrongly State: Solid Red Active Feedback */
 .key.press-error {
     background: var(--error-color) !important;
     box-shadow: 0 0px 0px transparent !important;
     transform: translateY(2px);
 }
-.key.press-error span, .key.press-error {
-    color: #fff !important;
-}
+.key.press-error span, .key.press-error { color: #fff !important; }
 
+/* ==========================================================================
+   5. RESULTS POP-UP MODAL BOX
+   ========================================================================== */
+.modal-backdrop {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(20, 21, 23, 0.85);
+    display: flex; 
+    justify-content: center; /* Horizontally centers popup card */
+    align-items: center;     /* Vertically centers popup card */
+    opacity: 0; 
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 999;
+}
+.modal-backdrop.active { opacity: 1; pointer-events: auto; }
+
+.modal-box {
+    background: #2c2e31;
+    border: 2px solid var(--main-color);
+    padding: 35px; 
+    border-radius: 16px;
+    width: 90%; 
+    max-width: 520px;
+    text-align: center; 
+    box-shadow: 0 20px 45px rgba(0,0,0,0.5);
+    transform: scale(0.9); 
+    transition: transform 0.3s ease;
+}
+.modal-backdrop.active .modal-box { transform: scale(1); }
+
+.modal-box h2 { margin-top: 0; font-family: sans-serif; color: var(--main-color); font-size: 2rem; }
+.modal-sub { color: var(--sub-color); margin-bottom: 25px; font-size: 0.95rem; }
+
+.modal-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 15px; 
+    margin-bottom: 30px; 
+}
+.m-card { background: #202124; padding: 15px; border-radius: 8px; display: flex; flex-direction: column; }
+.m-card .num { font-size: 2rem; font-weight: bold; color: var(--text-color); }
+.m-card .text-red { color: var(--error-color); }
+.m-card .lbl { font-size: 0.75rem; color: var(--sub-color); text-transform: uppercase; margin-top: 5px; }
+
+#modal-close-btn {
+    background: var(--main-color); color: #000; border: none;
+    padding: 12px 35px; font-weight: bold; border-radius: 6px;
+    font-size: 1rem; cursor: pointer; transition: opacity 0.2s;
+}
+#modal-close-btn:hover { opacity: 0.9; }
+
+/* ==========================================================================
+   6. RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
 @media (max-width: 768px) {
-    .keyboard { display: none; }
+    .keyboard { display: none; } /* Safely hides mechanical layout on touch viewports */
     .header { flex-direction: column; gap: 15px; }
-    .stats { width: 100%; justify-content: space-around; }
 }
