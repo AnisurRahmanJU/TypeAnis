@@ -1,15 +1,25 @@
-const englishWords = [
-    "Anis", "Dhaka", "Bangladesh", "The", "Quick", "Brown", "Fox", "Jumps", "Over", "Lazy", 
-    "Dog", "Javascript", "Monkeytype", "Keyboard", "Programming", "Computer", "Internet", "Software", "Developer", "Application",
-    "System", "Code", "Project", "Design", "Interface", "Variable", "Function", "Engine", "Logic", "Master"
+/* ==========================================================================
+   1. WORD & SENTENCE POOLS (Meaningful Sentences)
+   ========================================================================== */
+const englishSentences = [
+    ["The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog."],
+    ["Practice", "makes", "a", "man", "perfect", "in", "every", "aspect", "of", "life."],
+    ["Honesty", "is", "the", "best", "policy", "to", "build", "a", "great", "network."],
+    ["Technology", "is", "changing", "the", "world", "with", "amazing", "software", "tools."],
+    ["Keep", "your", "eyes", "on", "the", "stars", "and", "your", "feet", "on", "the", "ground."]
 ];
 
-const banglaWords = [
-    "আনিস", "ঢাকা", "বাংলাদেশ", "আমাদের", "সোনার", "আমি", "তোমায়", "ভালোবাসি", "ভাষা", "আন্দোলন", 
-    "শহীদ", "স্মৃতি", "সবাই", "একত্রে", "সুন্দর", "পদ্মা", "মেঘনা", "যমুনা", "নদী", "মাতৃক",
-    "বাংলা", "চলক", "ধ্রুবক", "ফ্লোচার্ট", "বোর্ড", "পদ্ধতি", "প্রোগ্রাম", "কম্পিউটার", "স্মার্ট", "ইঞ্জিন"
+const banglaSentences = [
+    ["আমাদের", "ছোট", "নদীতে", "বংশী", "নদীর", "মাছ", "ভেসে", "ওঠে", "চাঁদের", "আলোয়।"],
+    ["বাংলাদেশ", "একটি", "নদী", "মাতৃক", "সুন্দর", "দেশ", "আমি", "তোমায়", "ভালোবাসি।"],
+    ["পরিশ্রম", "সৌভাগ্যের", "প্রসূতি", "তাই", "সবাই", "একত্রে", "কাজ", "করুন।"],
+    ["দুঃখ", "কষ্ট", "মানুষের", "জীবনকে", "স্মার্ট", "ও", "শক্তিশালী", "করে", "তোলে।"],
+    ["হাঁস", "এবং", "বিড়াল", "পাহাড়ের", "কাছে", "কাঁচের", "থালায়", "খাবার", "খায়।"]
 ];
 
+/* ==========================================================================
+   2. STATE VARIABLES
+   ========================================================================== */
 let currentWords = [];
 let wordIndex = 0;
 let charIndex = 0;
@@ -18,12 +28,15 @@ let totalTyped = 0;
 let isBanglaMode = false;
 let errorTracker = {};
 
-// Timer configuration management parameters
 let timeLeft = 60; 
 let timerInterval = null;
 let isTestActive = false;
 let hasStarted = false;
+let expectedInputLength = 0;
 
+/* ==========================================================================
+   3. DOM ELEMENT REFERENCES
+   ========================================================================== */
 const wordsDisplay = document.getElementById("words-display");
 const hiddenInput = document.getElementById("hidden-input");
 const keyboardWrapper = document.getElementById("keyboard");
@@ -35,7 +48,6 @@ const btnEn = document.getElementById("btn-en");
 const btnBn = document.getElementById("btn-bn");
 const restartBtn = document.getElementById("restart-btn");
 
-// Modal presentation objects
 const resultModal = document.getElementById("result-modal");
 const modalCloseBtn = document.getElementById("modal-close-btn");
 const resWpm = document.getElementById("res-wpm");
@@ -43,6 +55,9 @@ const resAcc = document.getElementById("res-acc");
 const resTyped = document.getElementById("res-typed");
 const resErrors = document.getElementById("res-errors");
 
+/* ==========================================================================
+   4. ENGINE CORE & INITIALIZATION (Smart Sentence Loader)
+   ========================================================================== */
 function initTest(mode) {
     clearInterval(timerInterval);
     timerInterval = null;
@@ -56,24 +71,27 @@ function initTest(mode) {
     errors = 0;
     totalTyped = 0;
     errorTracker = {};
+    expectedInputLength = 0;
     
     timerDisplay.innerText = "60s";
     wpmDisplay.innerText = "0";
-    accuracyDisplay.innerText = "0"; // Stays strictly at 0% until typing begins
+    accuracyDisplay.innerText = "0"; 
     
     isBanglaMode = mode === "bn";
     keyboardWrapper.setAttribute("data-layout", mode);
     
-    // Core Change: Build a flat collection pool shuffled to extract exactly 30 words per session load
-    let sourcePool = isBanglaMode ? [...banglaWords] : [...englishWords];
+    // Core Change: Shuffle sentence blocks instead of individual words
+    let sourcePool = isBanglaMode ? [...banglaSentences] : [...englishSentences];
+    sourcePool.sort(() => Math.random() - 0.5);
     
-    // Dynamic fallback generation to secure 30 items if required
-    while (sourcePool.length < 30) {
-        sourcePool.push(...sourcePool);
+    currentWords = [];
+    let poolIndex = 0;
+    
+    // Add full sentences until we safely hit or cross the 30-word limit threshold
+    while (currentWords.length < 30) {
+        currentWords.push(...sourcePool[poolIndex % sourcePool.length]);
+        poolIndex++;
     }
-    
-    // Sort array elements arbitrarily and capture exactly the first 30 indexes
-    currentWords = sourcePool.sort(() => Math.random() - 0.5).slice(0, 30);
     
     wordCountDisplay.innerText = `0/${currentWords.length}`;
     renderWords();
@@ -109,6 +127,9 @@ function renderWords() {
     markCurrentChar();
 }
 
+/* ==========================================================================
+   5. GAMEPLAY & TEXT INPUT PROCESSING
+   ========================================================================== */
 function updateSuggestedKey() {
     document.querySelectorAll(".key.suggest-orange").forEach(el => el.classList.remove("suggest-orange"));
     if (!isTestActive || wordIndex >= currentWords.length) return;
@@ -172,6 +193,12 @@ hiddenInput.addEventListener("input", (e) => {
     }
 
     const typedVal = e.target.value;
+    
+    if (typedVal.length < expectedInputLength) {
+        handleBackspace();
+        return;
+    }
+
     if (typedVal === "") return;
     
     const currentWord = currentWords[wordIndex];
@@ -192,6 +219,7 @@ hiddenInput.addEventListener("input", (e) => {
         wordIndex++;
         charIndex = 0;
         e.target.value = "";
+        expectedInputLength = 0;
         wordCountDisplay.innerText = `${wordIndex}/${currentWords.length}`;
     } else {
         const expectedChar = currentWord[charIndex];
@@ -206,10 +234,10 @@ hiddenInput.addEventListener("input", (e) => {
                 if(!errorTracker[trackingKey]) { errors++; errorTracker[trackingKey] = true; }
             }
             charIndex++;
+            expectedInputLength = typedVal.length;
         }
     }
 
-    // Auto-finish early if the user finishes all 30 loaded words within 1 minute
     if (wordIndex >= currentWords.length) {
         endTest();
     } else {
@@ -218,6 +246,9 @@ hiddenInput.addEventListener("input", (e) => {
     }
 });
 
+/* ==========================================================================
+   6. DEVICE-AGNOSTIC BACKSPACE LOGIC
+   ========================================================================== */
 function handleBackspace() {
     if (charIndex > 0) {
         charIndex--;
@@ -255,11 +286,17 @@ function handleBackspace() {
         wordCountDisplay.innerText = `${wordIndex}/${currentWords.length}`;
     }
     
-    hiddenInput.value = charIndex > 0 ? "x".repeat(charIndex) : ""; 
+    const proxyText = charIndex > 0 ? "x".repeat(charIndex) : "";
+    hiddenInput.value = proxyText; 
+    expectedInputLength = proxyText.length;
+    
     markCurrentChar();
     updateStats();
 }
 
+/* ==========================================================================
+   7. CALCULATIONS & MODAL ACTIONS
+   ========================================================================== */
 function updateStats() {
     const timeElapsed = (60 - timeLeft) / 60;
     if (timeElapsed <= 0 || totalTyped === 0) {
@@ -281,7 +318,7 @@ function endTest() {
     hiddenInput.disabled = true;
     
     document.querySelectorAll(".char.current").forEach(el => el.classList.remove("current"));
-    document.querySelectorAll(".key.suggest-orange").forEach(el => el.classList.remove("current"));
+    document.querySelectorAll(".key.suggest-orange").forEach(el => el.classList.remove("suggest-orange"));
 
     const finalWpm = wpmDisplay.innerText;
     const finalAcc = accuracyDisplay.innerText;
@@ -294,6 +331,9 @@ function endTest() {
     resultModal.classList.add("active");
 }
 
+/* ==========================================================================
+   8. VISUAL KEYBOARD SYNCHRONIZATION
+   ========================================================================== */
 window.addEventListener("keydown", (e) => {
     let keyId = e.code;
     const targetKey = document.getElementById(keyId);
@@ -330,6 +370,9 @@ window.addEventListener("keyup", (e) => {
     updateSuggestedKey();
 });
 
+/* ==========================================================================
+   9. GLOBAL APPLICATION EVENT HANDLERS
+   ========================================================================== */
 wordsDisplay.addEventListener("click", () => { if(isTestActive) hiddenInput.focus(); });
 btnEn.addEventListener("click", () => { btnEn.classList.add("active"); btnBn.classList.remove("active"); initTest("en"); });
 btnBn.addEventListener("click", () => { btnBn.classList.add("active"); btnEn.classList.remove("active"); initTest("bn"); });
