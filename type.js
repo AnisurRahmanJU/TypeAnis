@@ -1,5 +1,5 @@
 /* ==========================================================================
-   1. WORD & SENTENCE POOLS (Meaningful Sentences)
+   1. WORD & SENTENCE POOLS (Meaningful Sentences with Punctuation)
    ========================================================================== */
 const englishSentences = [
     ["The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog."],
@@ -56,7 +56,7 @@ const resTyped = document.getElementById("res-typed");
 const resErrors = document.getElementById("res-errors");
 
 /* ==========================================================================
-   4. ENGINE CORE & INITIALIZATION (Smart Sentence Loader)
+   4. ENGINE CORE & INITIALIZATION
    ========================================================================== */
 function initTest(mode) {
     clearInterval(timerInterval);
@@ -80,14 +80,12 @@ function initTest(mode) {
     isBanglaMode = mode === "bn";
     keyboardWrapper.setAttribute("data-layout", mode);
     
-    // Core Change: Shuffle sentence blocks instead of individual words
     let sourcePool = isBanglaMode ? [...banglaSentences] : [...englishSentences];
     sourcePool.sort(() => Math.random() - 0.5);
     
     currentWords = [];
     let poolIndex = 0;
     
-    // Add full sentences until we safely hit or cross the 30-word limit threshold
     while (currentWords.length < 30) {
         currentWords.push(...sourcePool[poolIndex % sourcePool.length]);
         poolIndex++;
@@ -229,8 +227,10 @@ hiddenInput.addEventListener("input", (e) => {
         if (charEl) {
             if (typedChar === expectedChar) {
                 charEl.classList.add("correct");
+                charEl.classList.remove("incorrect");
             } else {
                 charEl.classList.add("incorrect");
+                charEl.classList.remove("correct");
                 if(!errorTracker[trackingKey]) { errors++; errorTracker[trackingKey] = true; }
             }
             charIndex++;
@@ -332,7 +332,7 @@ function endTest() {
 }
 
 /* ==========================================================================
-   8. VISUAL KEYBOARD SYNCHRONIZATION
+   8. VISUAL KEYBOARD SYNCHRONIZATION WITH SYMBOL PATTERNS
    ========================================================================== */
 window.addEventListener("keydown", (e) => {
     let keyId = e.code;
@@ -352,9 +352,15 @@ window.addEventListener("keydown", (e) => {
 
     const dataKeys = targetKey.getAttribute("data-key");
     
+    // Explicit standardizations for punctuation characters evaluation mapping
+    let normalizeKey = e.key;
+    if (normalizeKey === "Period") normalizeKey = ".";
+    if (normalizeKey === "Comma") normalizeKey = ",";
+    if (normalizeKey === "Semicolon") normalizeKey = ";";
+
     if (e.key === "Backspace" || e.key === "Shift" || e.key === "CapsLock" || e.key === "Tab" || e.key === "Enter") {
         targetKey.classList.add("press-correct");
-    } else if (dataKeys && dataKeys.split(" ").includes(expectedChar)) {
+    } else if (dataKeys && (dataKeys.split(" ").includes(expectedChar) || normalizeKey === expectedChar)) {
         targetKey.classList.add("press-correct");
     } else {
         targetKey.classList.add("press-error");
