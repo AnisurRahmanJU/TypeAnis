@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TypeAnis - Practice Sandbox</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,11 +15,8 @@
             <a href="index.html" class="brand-link" style="text-decoration: none;">
                 <div class="brand">
                     <span class="logo-icon">⌨</span> TypeAnis 
-          </div>
-         </a>
-                
-            
-            
+                </div>
+            </a>
             
             <div class="modes">
                 <button id="btn-en" class="active">English</button>
@@ -36,7 +36,9 @@
             <div id="words-display" class="words-display"></div>
         </div>
 
-         <button id="restart-btn">⏩ Next Sentence</button>
+        <div class="control-actions">
+            <button id="restart-btn">⏩ Next Sentence</button>
+        </div>
 
         <div class="keyboard" id="keyboard" data-layout="en">
             <div class="row">
@@ -63,7 +65,7 @@
                 <div class="key" id="KeyR" data-key="r R প ফ"><span class="bn">প / ফ</span><span class="en">R</span></div>
                 <div class="key" id="KeyT" data-key="t T ট ঠ"><span class="bn">ট / ঠ</span><span class="en">T</span></div>
                 <div class="key" id="KeyY" data-key="y Y চ ছ"><span class="bn">চ / ছ</span><span class="en">Y</span></div>
-                <div class="key" id="KeyU" data-key="u U জ ঝ"><span class="bn">জ / ঝ</span><span class="en">U</span></div>
+                <div class="key" id="KeyU" data-key="u U ஜ ঝ"><span class="bn">জ / ঝ</span><span class="en">U</span></div>
                 <div class="key" id="KeyI" data-key="i I হ ঞ"><span class="bn">হ / ঞ</span><span class="en">I</span></div>
                 <div class="key" id="KeyO" data-key="o O গ ঘ"><span class="bn">গ / ঘ</span><span class="en">O</span></div>
                 <div class="key" id="KeyP" data-key="p P ড় ঢ়"><span class="bn">ড় / ঢ়</span><span class="en">P</span></div>
@@ -92,7 +94,7 @@
                 <div class="key" id="KeyV" data-key="v V র ল"><span class="bn">র / ল</span><span class="en">V</span></div>
                 <div class="key" id="KeyB" data-key="b B ন ণ"><span class="bn">ন / ণ</span><span class="en">B</span></div>
                 <div class="key" id="KeyN" data-key="n N স ষ"><span class="bn">স / ষ</span><span class="en">N</span></div>
-                <div class="key" id="KeyM" data-key="m M ম শ"><span class="bn">ম / শ</span><span class="en">M</span></div>
+                <div class="key" id="KeyM" data-key="m M ম শ"><span class="bn">ม / শ</span><span class="en">M</span></div>
                 <div class="key" id="Comma">,</div>
                 <div class="key" id="Period">.</div>
                 <div class="key modifier shift-r" id="ShiftRight">Shift</div>
@@ -101,6 +103,16 @@
                 <div class="space key" id="Space" data-key=" ">Space</div>
             </div>
         </div>
+
+        <footer class="site-footer">
+            <div class="footer-left">
+                <a href="mailto:contact@typeanis.com" class="footer-link"><span class="footer-icon">✉</span> contact</a>
+                <a href="https://github.com/AnisurRahmanJU" target="_blank" class="footer-link"><span class="footer-icon">&lt;/&gt;</span> github</a>
+            </div>
+            <div class="footer-right">
+                <span class="footer-developer">Developer: Md. Anisur Rahman</span>
+            </div>
+        </footer>
     </div>
 
     <script src="practice.js"></script>
