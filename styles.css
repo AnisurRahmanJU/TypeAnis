@@ -16,7 +16,8 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: 'Courier New', Courier, monospace, Arial;
+    /* Updated default system fallback chain to use Roboto Mono */
+    font-family: 'Roboto Mono', 'Courier New', Courier, monospace;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,7 +42,7 @@ body {
     justify-content: space-between; /* Pushes brand left, stats right, modes center */
     align-items: center;           /* Vertically aligns content line items */
     margin-bottom: 25px;
-    font-family: sans-serif;
+    font-family: 'Roboto Mono', sans-serif;
     width: 100%;
 }
 
@@ -65,6 +66,7 @@ body {
     cursor: pointer;
     margin-right: 12px;
     font-weight: 600;
+    font-family: 'Roboto Mono', sans-serif;
     transition: color 0.2s;
 }
 
@@ -121,6 +123,17 @@ body {
     text-align: justify; /* Cleans up line breaks */
 }
 
+/* Dynamic language application for the text block */
+.keyboard[data-layout="en"] ~ .type-area-container .words-display,
+.words-display:not([lang="bn"]) {
+    font-family: 'Roboto Mono', monospace;
+}
+
+.keyboard[data-layout="bn"] ~ .type-area-container .words-display,
+.words-display[lang="bn"] {
+    font-family: 'Hind Siliguri', sans-serif;
+}
+
 .word {
     display: inline-block;
     margin-right: 12px;
@@ -167,6 +180,7 @@ body {
     padding: 8px 16px;
     font-size: 0.95rem;
     cursor: pointer;
+    font-family: 'Roboto Mono', monospace;
     transition: color 0.2s;
 }
 
@@ -210,7 +224,7 @@ body {
 }
 
 /* Modifier Keys Width & Alignments */
-.key.modifier { font-size: 0.7rem; align-items: flex-start; padding-left: 8px; color: #505559; }
+.key.modifier { font-family: 'Roboto Mono', monospace; font-size: 0.7rem; align-items: flex-start; padding-left: 8px; color: #505559; }
 .key.backspace { width: 95px; align-items: flex-end; padding-right: 10px; }
 .key.tab { width: 75px; }
 .key.caps { width: 85px; }
@@ -222,9 +236,10 @@ body {
 .key span { display: block; text-align: center; transition: font-size 0.15s, color 0.15s; }
 
 /* Language Layout Presentation Handlers */
-.keyboard[data-layout="en"] .key .en { font-size: 0.95rem; font-weight: bold; color: var(--text-color); }
+.keyboard[data-layout="en"] .key .en { font-family: 'Roboto Mono', monospace; font-size: 0.95rem; font-weight: bold; color: var(--text-color); }
 .keyboard[data-layout="en"] .key .bn { font-size: 0.0rem; color: transparent; opacity: 0; }
-.keyboard[data-layout="bn"] .key .bn { font-size: 1.05rem; font-weight: 500; color: var(--text-color); }
+
+.keyboard[data-layout="bn"] .key .bn { font-family: 'Hind Siliguri', sans-serif; font-size: 1.15rem; font-weight: 500; color: var(--text-color); }
 .keyboard[data-layout="bn"] .key .en { font-size: 0.0rem; color: transparent; opacity: 0; }
 
 /* Dynamic Interactive Typing Feedback States */
@@ -277,10 +292,11 @@ body {
     box-shadow: 0 20px 45px rgba(0,0,0,0.5);
     transform: scale(0.9); 
     transition: transform 0.3s ease;
+    font-family: 'Roboto Mono', monospace;
 }
 .modal-backdrop.active .modal-box { transform: scale(1); }
 
-.modal-box h2 { margin-top: 0; font-family: sans-serif; color: var(--main-color); font-size: 2rem; }
+.modal-box h2 { margin-top: 0; font-family: 'Roboto Mono', sans-serif; color: var(--main-color); font-size: 2rem; }
 .modal-sub { color: var(--sub-color); margin-bottom: 25px; font-size: 0.95rem; }
 
 .modal-grid { 
@@ -298,6 +314,7 @@ body {
     background: var(--main-color); color: #000; border: none;
     padding: 12px 35px; font-weight: bold; border-radius: 6px;
     font-size: 1rem; cursor: pointer; transition: opacity 0.2s;
+    font-family: 'Roboto Mono', monospace;
 }
 #modal-close-btn:hover { opacity: 0.9; }
 
