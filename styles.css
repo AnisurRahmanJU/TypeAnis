@@ -334,3 +334,61 @@ body {
 .brand-link:hover {
     opacity: 0.85;  /* Subtle animation hint that it is a link when hovered */
 }
+
+
+
+/* ==========================================================================
+   7. SITE FOOTER SECTION
+   ========================================================================== */
+.site-footer {
+    width: 90%;
+    max-width: 950px;
+    margin: 40px auto 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--sub-color);
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05); /* Optional subtle divider line */
+}
+
+.footer-left {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-link {
+    color: var(--sub-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.footer-link:hover {
+    color: var(--text-color);
+}
+
+.footer-icon {
+    margin-right: 6px;
+    font-size: 0.9rem;
+}
+
+.footer-developer {
+    color: var(--sub-color);
+    font-weight: 500;
+}
+
+/* Responsive adjustment for mobile viewports */
+@media (max-width: 768px) {
+    .site-footer {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+    .footer-left {
+        justify-content: center;
+    }
+}
