@@ -16,14 +16,13 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    /* Updated default system fallback chain to use Roboto Mono */
     font-family: 'Roboto Mono', 'Courier New', Courier, monospace;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    padding: 20px 0;
+    padding: 30px 0;
     box-sizing: border-box;
 }
 
@@ -39,8 +38,8 @@ body {
    ========================================================================== */
 .header {
     display: flex;
-    justify-content: space-between; /* Pushes brand left, stats right, modes center */
-    align-items: center;           /* Vertically aligns content line items */
+    justify-content: space-between; 
+    align-items: center;           
     margin-bottom: 25px;
     font-family: 'Roboto Mono', sans-serif;
     width: 100%;
@@ -56,6 +55,16 @@ body {
 .brand .logo-icon {
     color: var(--main-color);
     margin-right: 4px;
+}
+
+.brand-link {
+    color: inherit; 
+    text-decoration: none;
+    display: inline-block;
+}
+
+.brand-link:hover {
+    opacity: 0.85;  
 }
 
 .modes button {
@@ -120,10 +129,9 @@ body {
     letter-spacing: 1px;
     user-select: none;
     color: var(--sub-color);
-    text-align: justify; /* Cleans up line breaks */
+    text-align: justify; 
 }
 
-/* Dynamic language application for the text block */
 .keyboard[data-layout="en"] ~ .type-area-container .words-display,
 .words-display:not([lang="bn"]) {
     font-family: 'Roboto Mono', monospace;
@@ -139,7 +147,6 @@ body {
     margin-right: 12px;
 }
 
-/* Character States */
 .char {
     position: relative;
     transition: color 0.1s;
@@ -155,7 +162,6 @@ body {
     border-radius: 2px;
 }
 
-/* Flashing Caret Cursor Styling */
 .char.current::before {
     content: '';
     position: absolute;
@@ -171,9 +177,14 @@ body {
     50% { opacity: 0; }
 }
 
-#restart-btn {
-    margin: 0 auto 15px auto;
-    display: block;
+.control-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+#restart-btn, #practice-btn {
     background: none;
     border: none;
     color: var(--sub-color);
@@ -184,7 +195,7 @@ body {
     transition: color 0.2s;
 }
 
-#restart-btn:hover {
+#restart-btn:hover, #practice-btn:hover {
     color: var(--text-color);
 }
 
@@ -199,11 +210,12 @@ body {
     padding: 18px;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    margin-bottom: 25px;
 }
 
 .row {
     display: flex;
-    justify-content: center; /* Symmetrically balances standard keys horizontally */
+    justify-content: center; 
     gap: 6px;
     width: 100%;
 }
@@ -223,7 +235,6 @@ body {
     user-select: none;
 }
 
-/* Modifier Keys Width & Alignments */
 .key.modifier { font-family: 'Roboto Mono', monospace; font-size: 0.7rem; align-items: flex-start; padding-left: 8px; color: #505559; }
 .key.backspace { width: 95px; align-items: flex-end; padding-right: 10px; }
 .key.tab { width: 75px; }
@@ -235,14 +246,12 @@ body {
 
 .key span { display: block; text-align: center; transition: font-size 0.15s, color 0.15s; }
 
-/* Language Layout Presentation Handlers */
 .keyboard[data-layout="en"] .key .en { font-family: 'Roboto Mono', monospace; font-size: 0.95rem; font-weight: bold; color: var(--text-color); }
 .keyboard[data-layout="en"] .key .bn { font-size: 0.0rem; color: transparent; opacity: 0; }
 
 .keyboard[data-layout="bn"] .key .bn { font-family: 'Hind Siliguri', sans-serif; font-size: 1.15rem; font-weight: 500; color: var(--text-color); }
 .keyboard[data-layout="bn"] .key .en { font-size: 0.0rem; color: transparent; opacity: 0; }
 
-/* Dynamic Interactive Typing Feedback States */
 .key.suggest-orange {
     background: rgba(230, 81, 0, 0.22) !important;
     border-color: var(--suggest-color) !important;
@@ -272,8 +281,8 @@ body {
     top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(20, 21, 23, 0.85);
     display: flex; 
-    justify-content: center; /* Horizontally centers popup card */
-    align-items: center;     /* Vertically centers popup card */
+    justify-content: center; 
+    align-items: center;     
     opacity: 0; 
     pointer-events: none;
     transition: opacity 0.3s ease;
@@ -319,39 +328,18 @@ body {
 #modal-close-btn:hover { opacity: 0.9; }
 
 /* ==========================================================================
-   6. RESPONSIVE MEDIA QUERIES
-   ========================================================================== */
-@media (max-width: 768px) {
-    .keyboard { display: none; } /* Safely hides mechanical layout on touch viewports */
-    .header { flex-direction: column; gap: 15px; }
-}
-
-.brand-link {
-    color: inherit; /* Keeps your default text colors intact */
-    text-decoration: none;
-    display: inline-block;
-}
-.brand-link:hover {
-    opacity: 0.85;  /* Subtle animation hint that it is a link when hovered */
-}
-
-
-
-/* ==========================================================================
-   7. SITE FOOTER SECTION
+   6. SITE FOOTER SECTION
    ========================================================================== */
 .site-footer {
-    width: 90%;
-    max-width: 950px;
-    margin: 40px auto 0 auto;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-family: 'Roboto Mono', monospace;
     font-size: 0.85rem;
     color: var(--sub-color);
-    padding-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05); /* Optional subtle divider line */
+    padding-top: 20px;
+    margin-top: auto;
 }
 
 .footer-left {
@@ -381,8 +369,12 @@ body {
     font-weight: 500;
 }
 
-/* Responsive adjustment for mobile viewports */
+/* ==========================================================================
+   7. RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
 @media (max-width: 768px) {
+    .keyboard { display: none; } 
+    .header { flex-direction: column; gap: 15px; }
     .site-footer {
         flex-direction: column;
         gap: 12px;
