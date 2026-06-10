@@ -490,15 +490,12 @@ function handleBackspace() {
    7. CALCULATIONS & MODAL ACTIONS
    ========================================================================== */
 function updateStats() {
-    // ... logic for calculating accuracy ...
-    
-    // Likely location of your current issue:
-    const accElement = document.getElementById('accuracy-display');
-    accElement.textContent = accuracy; 
-    
-    // ADD THE PERCENT SYMBOL HERE:
-    accElement.textContent = Math.round(accuracy) + "%"; 
-}
+    const timeElapsed = (60 - timeLeft) / 60;
+    if (timeElapsed <= 0 || totalTyped === 0) {
+        wpmDisplay.innerText = "0";
+        accuracyDisplay.innerText = "0";
+        return;
+    }
 
     const wpm = Math.round((totalTyped / 5) / timeElapsed);
     const accuracy = Math.max(0, Math.round(((totalTyped - errors) / totalTyped) * 100));
