@@ -96,6 +96,7 @@ body {
     color: var(--main-color);
     font-weight: bold;
     line-height: 1.1rem;
+    white-space: nowrap; /* Prevents the % from wrapping to a new line */
 }
 
 .stat-box .label {
